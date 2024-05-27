@@ -8,12 +8,6 @@ public class BombContactHandler : Handler
 	private float _delayWait;
 	private WaitForSecondsRealtime _wait;
 
-	private void Start()
-	{
-		_delayWait = Time.deltaTime;
-		_wait = new(_delayWait);
-	}
-
 	private void OnEnable()
 	{
 		StartCoroutine(TransparencyChange());
@@ -21,6 +15,9 @@ public class BombContactHandler : Handler
 
 	private IEnumerator TransparencyChange()
 	{
+		_delayWait = Time.deltaTime;
+		_wait = new(_delayWait);
+
 		int liveTime = DestroyOnRandomTime();
 		Color color = MeshHandler.material.color;
 		float alpha = color.a;
