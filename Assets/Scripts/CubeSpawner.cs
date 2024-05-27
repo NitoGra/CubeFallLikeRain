@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -9,7 +11,9 @@ public class CubeSpawner : MonoBehaviour
 	[SerializeField] private int _poolCapacity;
 	[SerializeField] private int _poolMaxSize;
 	[SerializeField] private float _spawnDelay;
+	[SerializeField] private TextMeshProUGUI _text;
 
+	private string _textOutput = "Всего кубов создано: ";
 	private WaitForSecondsRealtime _wait;
 	private ObjectPool<CubeContactHandler> _pool;
 
@@ -45,14 +49,16 @@ public class CubeSpawner : MonoBehaviour
 		Bounds colliderBounds = _zoneSpawn.bounds;
 		Vector3 colliderCenter = colliderBounds.center;
 
-		float randomX = Random.Range(colliderCenter.x - colliderBounds.extents.x, colliderCenter.x + colliderBounds.extents.x);
-		float randomY = Random.Range(colliderCenter.y - colliderBounds.extents.y, colliderCenter.y + colliderBounds.extents.y);
-		float randomZ = Random.Range(colliderCenter.z - colliderBounds.extents.z, colliderCenter.z + colliderBounds.extents.z);
+		float randomX = UnityEngine.Random.Range(colliderCenter.x - colliderBounds.extents.x, colliderCenter.x + colliderBounds.extents.x);
+		float randomY = UnityEngine.Random.Range(colliderCenter.y - colliderBounds.extents.y, colliderCenter.y + colliderBounds.extents.y);
+		float randomZ = UnityEngine.Random.Range(colliderCenter.z - colliderBounds.extents.z, colliderCenter.z + colliderBounds.extents.z);
 
 		Vector3 randomPos = new(randomX, randomY, randomZ);
 
 		obj.gameObject.SetActive(true);
 		obj.SetSpawnSettings(_pool);
+		obj.GetComponent<UISpawnNumbers>().SetText(_text);
 		obj.transform.position = randomPos;
+		_text.text =_textOutput + Convert.ToString(_pool.CountAll);
 	}
 }
