@@ -24,8 +24,6 @@ public abstract class Handler : MonoBehaviour, IContactHandler<Handler>
 	private int MakeRandomLiveTime()
 	{
 		int liveTime = Random.Range(_minLifeTime, _maxLifeTime + 1);
-
-		print(liveTime);
 		return liveTime;
 	}
 
