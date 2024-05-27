@@ -29,16 +29,16 @@ public class CubeContactHandler : Handler
 		DestroyOnRandomTime();
 	}
 
+	protected override void Destroy()
+	{
+		base.Destroy();
+		_isCanTouch = true;
+	}
+
 	public override void SetSpawnSettings(ObjectPool<Handler> pool)
 	{
 		_isCanTouch = true;
 		transform.rotation = _defaultQuaternion;
 		SetDefaultFields(pool, Color.white, MinLiveTime, MaxLiveTime);
-	}
-
-	protected override void Destroy()
-	{
-		base.Destroy();
-		_isCanTouch = true;
 	}
 }
