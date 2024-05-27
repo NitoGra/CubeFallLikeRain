@@ -1,21 +1,10 @@
+using System.Diagnostics;
 using UnityEngine;
 
 public class Expload : MonoBehaviour
 {
-	[SerializeField] private float _explodingRadiusMultiplyer;
-	[SerializeField] private float _explodingForseMultiplyer;
-
-	private float _explodingRadius;
-	private float _explodingForse;
-	private float _startExplodingRadius = 400;
-	private float _startExplodingForse = 400;
-	private float _proportionalityFactor = 1.5f;
-
-	private void Start()
-	{
-		_explodingRadius = _proportionalityFactor / transform.localScale.x * _explodingRadiusMultiplyer + _startExplodingRadius;
-		_explodingForse = _proportionalityFactor / transform.localScale.x * _explodingForseMultiplyer + _startExplodingForse;
-	}
+	[SerializeField] private float _explodingRadius;
+	[SerializeField] private float _explodingForse;
 
 	private void ExploadArray(Collider[] hitColliders)
 	{
@@ -31,7 +20,7 @@ public class Expload : MonoBehaviour
 
 	public void OnDrawGizmosSelected()
 	{
-		Gizmos.color = Color.white;
+		Gizmos.color = Color.yellow;
 		Gizmos.DrawSphere(transform.position, _explodingRadius);
 	}
 }

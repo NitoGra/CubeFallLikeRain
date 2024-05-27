@@ -134,8 +134,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92322398ef688e144a4178f572c71131, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _explodingRadiusMultiplyer: 1
-  _explodingForseMultiplyer: 1
+  _explodingRadius: 3
+  _explodingForse: 600
 --- !u!54 &1722475937380348245
 Rigidbody:
   m_ObjectHideFlags: 0
