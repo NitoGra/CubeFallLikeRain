@@ -5,7 +5,7 @@ using UnityEngine.Pool;
 [RequireComponent(typeof(Expload))]
 public class BombContactHandler : Handler
 {
-	private WaitForSecondsRealtime wait = new(0.1f);
+	private WaitForSecondsRealtime wait;
 
 	private void OnEnable()
 	{
@@ -14,22 +14,25 @@ public class BombContactHandler : Handler
 
 	private IEnumerator TransparencyChange()
 	{
+		int liveTime = DestroyOnRandomTime();
 		Color color = MeshHandler.material.color;
-		while (MeshHandler.material.color.a > 0)
+		float delayWait = Time.deltaTime;
+		wait = new(delayWait);
+
+		float alpha = color.a;
+		float step = delayWait / liveTime;
+
+		while (alpha < liveTime)
 		{
-			print(MeshHandler.material.color.a);
-			float alpha = color.a - 0.1f;
-			MeshHandler.material.color = new Color(Color.black.r, Color.black.g, Color.black.b, alpha);
+			alpha -= step;
+			color = new Color(color.r, color.g, color.b, alpha);
+			MeshHandler.material.color = color;
 			yield return wait;
 		}
-
-		DestroyOnRandomTime();
 	}
 
 	protected override void Destroy()
 	{
-		print("Бомба взорвана!");
-
 		GetComponent<Expload>().ExploadInRadius();
 		base.Destroy();
 	}

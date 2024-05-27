@@ -23,20 +23,24 @@ public abstract class Handler : MonoBehaviour, IContactHandler<Handler>
 
 	private int MakeRandomLiveTime()
 	{
-		return UnityEngine.Random.Range(_minLifeTime, _maxLifeTime + 1);
+		int liveTime = Random.Range(_minLifeTime, _maxLifeTime + 1);
+
+		print(liveTime);
+		return liveTime;
 	}
 
 	protected virtual void Destroy()
 	{
-		print("Бомба взорвана!");
 		_pool.Release(this);
 	}
 
 	public abstract void SetSpawnSettings(ObjectPool<Handler> pool);
 
-	public void DestroyOnRandomTime()
+	public int DestroyOnRandomTime()
 	{
-		Invoke(nameof(Destroy), MakeRandomLiveTime());
+		int liveTime = MakeRandomLiveTime();
+		Invoke(nameof(Destroy), liveTime);
+		return liveTime;
 	}
 
 	public void BackToDefault()
@@ -49,8 +53,9 @@ public abstract class Handler : MonoBehaviour, IContactHandler<Handler>
 	public void SetDefaultFields(ObjectPool<Handler> pool, Color defaultColor, int minLifeTime, int maxLifeTime)
 	{
 		_pool = pool;
-		_defaultColor = defaultColor;
 		_minLifeTime = minLifeTime;
 		_maxLifeTime = maxLifeTime;
+		_defaultColor = defaultColor;
+		gameObject.SetActive(true);
 	}
 }
