@@ -5,7 +5,14 @@ using UnityEngine.Pool;
 [RequireComponent(typeof(Expload))]
 public class BombContactHandler : Handler
 {
-	private WaitForSecondsRealtime wait;
+	private float _delayWait;
+	private WaitForSecondsRealtime _wait;
+
+	private void Start()
+	{
+		_delayWait = Time.deltaTime;
+		_wait = new(_delayWait);
+	}
 
 	private void OnEnable()
 	{
@@ -16,18 +23,15 @@ public class BombContactHandler : Handler
 	{
 		int liveTime = DestroyOnRandomTime();
 		Color color = MeshHandler.material.color;
-		float delayWait = Time.deltaTime;
-		wait = new(delayWait);
-
 		float alpha = color.a;
-		float step = delayWait / liveTime;
+		float step = _delayWait / liveTime;
 
 		while (alpha < liveTime)
 		{
 			alpha -= step;
 			color = new Color(color.r, color.g, color.b, alpha);
 			MeshHandler.material.color = color;
-			yield return wait;
+			yield return _wait;
 		}
 	}
 
