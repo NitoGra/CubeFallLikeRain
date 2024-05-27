@@ -1,32 +1,17 @@
-using System;
 using UnityEngine;
 using UnityEngine.Pool;
 
-public class CubeContactHandler : MonoBehaviour
+public class CubeContactHandler : Handler
 {
 	[SerializeField] private AudioSource _audio;
-	[SerializeField] private UISpawnNumbers _text;
 
 	readonly private Quaternion _defaultQuaternion = new(0, 0, 0, 0);
-	readonly private Color _defaultColor = Color.white;
-	readonly private float hueMin = 0f;
-	readonly private float hueMax = 0.5f;
-	readonly private float saturationMin= 0.7f;
-	readonly private float saturationMax = 1f;
-	
-	private Rigidbody _rigidbody;
-	private MeshRenderer _mesh;
-	private ObjectPool<CubeContactHandler> _pool;
+	readonly private float _hueMin = 0f;
+	readonly private float _hueMax = 0.5f;
+	readonly private float _saturationMin = 0.7f;
+	readonly private float _saturationMax = 1f;
 
 	private bool _isCanTouch = true;
-	private int _minLifeTime = 2;
-	private int _maxLifeTime = 5;
-
-	private void Awake()
-	{
-		_mesh = GetComponent<MeshRenderer>();
-		_rigidbody = GetComponent<Rigidbody>();
-	}
 
 	private void OnCollisionEnter(Collision collision)
 	{
@@ -39,24 +24,21 @@ public class CubeContactHandler : MonoBehaviour
 			return;
 
 		_isCanTouch = false;
-		_mesh.material.color = UnityEngine.Random.ColorHSV(hueMin, hueMax, saturationMin, saturationMax);
+		MeshHandler.material.color = UnityEngine.Random.ColorHSV(_hueMin, _hueMax, _saturationMin, _saturationMax);
 
-		int lifeTime = UnityEngine.Random.Range(_minLifeTime, _maxLifeTime + 1);
-		_text.SeeNumber(Convert.ToString(lifeTime), transform.position);
-		Invoke(nameof(Destroy), lifeTime);
+		DestroyOnRandomTime();
 	}
 
-	private void Destroy()
+	public override void SetSpawnSettings(ObjectPool<Handler> pool)
 	{
-		_pool.Release(this);
-	}
-
-	public void SetSpawnSettings(ObjectPool<CubeContactHandler> pool)
-	{
-		_pool = pool;
 		_isCanTouch = true;
-		_rigidbody.velocity = Vector3.zero;
-		_mesh.material.color = _defaultColor;
 		transform.rotation = _defaultQuaternion;
+		SetDefaultFields(pool, Color.white, MinLiveTime, MaxLiveTime);
+	}
+
+	protected override void Destroy()
+	{
+		base.Destroy();
+		_isCanTouch = true;
 	}
 }
